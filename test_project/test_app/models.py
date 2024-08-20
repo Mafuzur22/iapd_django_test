@@ -4,7 +4,8 @@ from django.db import models
 class profileDataModel(models.Model):
   name = models.CharField(max_length=50)
   roll = models.PositiveIntegerField()
+  #p_image = models.CharField(max_length=50)
   p_image = models.ImageField(upload_to='profile_images')
   
-  def __self__(self):
+  def __str__(self):
     return self.name

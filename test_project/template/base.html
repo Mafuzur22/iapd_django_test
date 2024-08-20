@@ -11,7 +11,8 @@
     <div class="container">
         <h1>Profile Card Generator</h1>
         <div class="form-container">
-            <form>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
 
@@ -26,13 +27,15 @@
         </div>
         
         <div class="cards-container">
+          {% for dt in data %}
             <div class="card">
-                <img src="https://via.placeholder.com/300x200" alt="Profile Image">
+                <img src={{"dt.p_image.url"}} alt="Profile Image">
                 <div class="info">
-                    <h2>Sample Name</h2>
-                    <p>Roll Number: 123</p>
+                    <h2>{{dt.name}}</h2>
+                    <p>Roll Number: {{dt.roll}}</p>
                 </div>
             </div>
+            {% endfor %}
             <!-- Add more cards here -->
         </div>
     </div>
