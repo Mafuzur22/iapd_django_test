@@ -1,16 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
-    <link rel="stylesheet" href="./style.css">
-    
-  </head>
-  <body>
-    <main>
-        <h1>Welcome to My Website</h1>  
-    </main>
-  </body>
+    <title>Profile Card Input</title>
+    <link rel="stylesheet" href={% static "style.css" %}>
+</head>
+<body>
+    <div class="container">
+        <h1>Profile Card Generator</h1>
+        <div class="form-container">
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="roll">Roll Number:</label>
+                <input type="number" id="roll" name="roll" required>
+
+                <label for="image">Profile Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+
+                <button type="submit">Create Profile Card</button>
+            </form>
+        </div>
+        
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x200" alt="Profile Image">
+                <div class="info">
+                    <h2>Sample Name</h2>
+                    <p>Roll Number: 123</p>
+                </div>
+            </div>
+            <!-- Add more cards here -->
+        </div>
+    </div>
+</body>
 </html>
