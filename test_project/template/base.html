@@ -9,7 +9,16 @@
 </head>
 <body>
     <div class="container">
+
         <h1>Profile Card Generator</h1>
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="error-container">
+        <!-- Example of error message -->
+        <p class="error-message">Student Name Already Exists.</p>
+        </div>
+        {% endfor %}
+        {% endif %}
         <div class="form-container">
             <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
@@ -25,11 +34,10 @@
                 <button type="submit">Create Profile Card</button>
             </form>
         </div>
-        
         <div class="cards-container">
           {% for dt in data %}
             <div class="card">
-                <img src={{"dt.p_image.url"}} alt="Profile Image">
+                <img src={{dt.p_image.url}} alt="Profile Image">
                 <div class="info">
                     <h2>{{dt.name}}</h2>
                     <p>Roll Number: {{dt.roll}}</p>
