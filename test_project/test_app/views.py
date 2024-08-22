@@ -4,6 +4,23 @@ from django.contrib import messages
 
 # Create your views here.
 def home(request):
+  if request.method == "GET" and 'query' in request.GET:
+    query = request.GET['query']
+    db_data = profileDataModel.objects.filter(name__icontains = query)
+    context = {
+     "data":db_data,
+
+    }
+    return render(request, "home.html", context)
+  else:
+    db_data = profileDataModel.objects.all()
+    context = {
+      "data":db_data,
+
+    }
+    return render(request, "home.html", context)
+  
+def addStd(request):
   if request.method == "POST":
 
     c_dt = request.POST
@@ -17,9 +34,8 @@ def home(request):
     else:
         messages.error(request, "message")
         return redirect('Home')
-  db_data = profileDataModel.objects.all()
   context = {
-    "data":db_data,
+    
 
   }
-  return render(request, "base.html", context)
+  return render(request, "create.html", context)

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block 'search' %}
+        <div class="search-bar">
+            <h2>Add Student</h2>
+        </div>
+        {% endblock %}
+{% block 'body' %}
+<h1>Add New Student Profile</h1>
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="error-container">
+        <!-- Example of error message -->
+        <p class="error-message">Student Name Already Exists.</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="roll">Roll Number:</label>
+                <input type="number" id="roll" name="roll" required>
+
+                <label for="image">Profile Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+
+                <button type="submit">Create Profile Card</button>
+            </form>
+        </div>
+        {% endblock %}

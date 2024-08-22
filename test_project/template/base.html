@@ -4,48 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Card Input</title>
-    <link rel="stylesheet" href={% static "style.css" %}>
+    <link href={% static 'style.css' %} rel="stylesheet" >
+    <style>
+      
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar .links {
+            display: flex;
+            gap: 15px;
+            
+        }
+        .navbar .links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar .links a:hover {
+            background-color: #575757;
+            color: #f1f1f1;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #555;
+            border-radius: 3px;
+            outline: none;
+        }
+        .search-bar .sbbutton {
+            padding: 5px 10px;
+            border: 1px solid #555;
+            background-color: #575757;
+            color: white;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 16px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .search-bar .sbbutton:hover {
+            background-color: #333;
+            border-color: #333;
+        }
+      
+    </style>
+    <title>Styled Navbar</title>
 </head>
 <body>
-    <div class="container">
-
-        <h1>Profile Card Generator</h1>
-        {% if messages %}
-        {% for msg in messages %}
-        <div class="error-container">
-        <!-- Example of error message -->
-        <p class="error-message">Student Name Already Exists.</p>
+    <div class="navbar">
+      {% block 'search' %}
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+            <button type="button">Search</button>
         </div>
-        {% endfor %}
-        {% endif %}
-        <div class="form-container">
-            <form method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="roll">Roll Number:</label>
-                <input type="number" id="roll" name="roll" required>
-
-                <label for="image">Profile Image:</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
-
-                <button type="submit">Create Profile Card</button>
-            </form>
-        </div>
-        <div class="cards-container">
-          {% for dt in data %}
-            <div class="card">
-                <img src={{dt.p_image.url}} alt="Profile Image">
-                <div class="info">
-                    <h2>{{dt.name}}</h2>
-                    <p>Roll Number: {{dt.roll}}</p>
-                </div>
-            </div>
-            {% endfor %}
-            <!-- Add more cards here -->
+        {% endblock %}
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/create">Add Student</a>
         </div>
     </div>
+    {% block 'body' %}
+    
+    {% endblock %}
 </body>
 </html>
