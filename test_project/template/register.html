@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #f4f4f4; /* Light grey background for the form */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        input[type="email"],
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+        .login-link {
+            display: inline-block;
+            color: #333;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        
+      
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Register</h2>
+        <form method="post">
+          {% csrf_token %}
+            
+            <label for="name">First Name:</label>
+            <input type="text" id="name1" name="name1" required>
+            
+            <label for="name">Last Name:</label>
+            <input type="text" id="name2" name="name2">
+            
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password1" name="password1" required>
+            
+            <label for="password">Confirm Password:</label>
+            <input type="password" id="password2" name="password2" required>
+            
+            <input type="submit" value="Register">
+        </form>
+        
+        <a href="/login" class="login-link">Already have an account? Log in</a>
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="error-container">
+        <!-- Example of error message -->
+        <p class="error-message">{{msg}}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>

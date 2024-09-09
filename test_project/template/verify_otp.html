@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+      /* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #333; /* Dark text color for contrast */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #ffffff; /* White background for the form */
+    border: 1px solid #dcdcdc; /* Light grey border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px;
+    width: 300px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #333; /* Dark button background */
+    color: #fff; /* White text */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #555; /* Darker button on hover */
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+#countdown {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#timer {
+    font-weight: bold;
+}
+
+#timer.expired {
+    color: red;
+}
+
+      
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verify OTP</h1>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+            <button type="submit">Verify</button>
+        </form>
+        <div id="countdown">
+            OTP expires in <span id="timer">05:00</span>
+        </div>
+    </div>
+    <script>
+        // Set the expiration time in seconds
+        const expirationTime = 5 * 60; // 5 minutes in seconds
+
+        // Function to format time as MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // Countdown function
+        function startCountdown(duration) {
+            const timerElement = document.getElementById('timer');
+            let timeRemaining = duration;
+
+            const interval = setInterval(() => {
+                timerElement.textContent = formatTime(timeRemaining);
+                timeRemaining--;
+
+                if (timeRemaining < 0) {
+                    clearInterval(interval);
+                    timerElement.textContent = 'Expired';
+                    timerElement.classList.add('expired');
+                }
+            }, 1000);
+        }
+
+        // Start the countdown
+        startCountdown(expirationTime);
+    </script>
+</body>
+</html>

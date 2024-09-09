@@ -6,14 +6,7 @@
         {% endblock %}
 {% block 'body' %}
 <h1>Add New Student Profile</h1>
-        {% if messages %}
-        {% for msg in messages %}
-        <div class="error-container">
-        <!-- Example of error message -->
-        <p class="error-message">Student Name Already Exists.</p>
-        </div>
-        {% endfor %}
-        {% endif %}
+        
         <div class="form-container">
             <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}

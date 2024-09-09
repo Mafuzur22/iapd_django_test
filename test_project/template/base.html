@@ -57,6 +57,28 @@
             background-color: #333;
             border-color: #333;
         }
+        .user-info{
+          width: 100%;
+          background: #333;
+          color: white;
+          display: flex;
+          gap: 10px;
+          padding: 10px 20px;
+          justify-content: end;
+         
+        }
+       .user-info form input{
+         background: white;
+         border: none;
+         font-family: Comic Sans MS;
+         font-weight: 600;
+         color: #fff;
+         background-color: #333;
+         padding: 0 0;
+         font-size: 15px;
+         
+         
+       }
       
     </style>
     <title>Styled Navbar</title>
@@ -73,7 +95,19 @@
             <a href="/">Home</a>
             <a href="/create">Add Student</a>
         </div>
+      
+
     </div>
+              {% if user.is_authenticated %}
+        <div class="user-info">
+            <span>Welcome, {{ user.username }}!</span>
+            <form method="post" action="/logout">
+                {% csrf_token %}
+                <input type="submit" value="Logout">
+            </form>
+        </div>
+        {% endif %}
+        
     {% block 'body' %}
     
     {% endblock %}

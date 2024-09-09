@@ -11,6 +11,14 @@
 {% block 'body' %}
 
     <div class="container">
+      {% if messages %}
+        {% for msg in messages %}
+        <div class="error-container">
+        <!-- Example of error message -->
+        <p class="error-message">Student Name Already Exists.</p>
+        </div>
+        {% endfor %}
+        {% endif %}
         <div class="cards-container">
           {% for dt in data %}
             <div class="card">
