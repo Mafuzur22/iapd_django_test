@@ -70,7 +70,7 @@ def send_otp(user, subject, otp):
   recipient = [user.email]
   send_mail(subject, message, from_email, recipient, fail_silently=False)
   OTP.objects.create(user=user, otp=otp)
-  return(f"An otp Has been sent to this {email} email")
+  return(f"An otp Has been sent to this {user.email} email")
   
 def register_user(request):
   if request.method == "POST":
@@ -89,7 +89,7 @@ def register_user(request):
       subject = "Email Verification Code."
       send_otp(user, subject, otp)
       
-      return render(request, "verify_otp.html", {'username': user.username})
+      return render(request, "verify_otp.html", {'username': user.username, 'password': password})
     else:
       messages.error(request, validate_password(password))
       return redirect("/register")
@@ -104,6 +104,7 @@ def register_user(request):
 def verify_otp(request):
   if request.method == 'POST':
     username = request.POST['username']
+    password = request.POST['password']
     otp = request.POST['otp']
 
     try:
@@ -117,6 +118,7 @@ def verify_otp(request):
       # If OTP is valid and not expired
       user = User.objects.get(username=username)
       user.is_active = True
+      user.set_password(password)
       user.save()
       otp_record.delete()  # Optional: remove OTP after use
       return redirect('login')
