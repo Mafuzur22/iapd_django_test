@@ -70,7 +70,7 @@ def send_otp(user, subject, otp):
   recipient = [user.email]
   send_mail(subject, message, from_email, recipient, fail_silently=False)
   OTP.objects.create(user=user, otp=otp)
-  return(f"An otp Has been sent to this {user.email} email")
+  
   
 def register_user(request):
   if request.method == "POST":
@@ -120,7 +120,8 @@ def verify_otp(request):
       user.is_active = True
       user.set_password(password)
       user.save()
-      otp_record.delete()  # Optional: remove OTP after use
+      otp_record.delete()
+      messages.success(register, "User Created") # Optional: remove OTP after use
       return redirect('login')
     except OTP.DoesNotExist:
       # Handle invalid OTP
