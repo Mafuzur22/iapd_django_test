@@ -119,7 +119,7 @@ def verify_otp(request):
       user = User.objects.get(username=username)
       user.is_active = True
       user.set_password(password)
-      user.save()
+      #user.save()
       otp_record.delete()  # Optional: remove OTP after use
       return redirect('login')
     except OTP.DoesNotExist:
