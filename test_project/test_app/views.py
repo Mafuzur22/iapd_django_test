@@ -83,16 +83,16 @@ def register_user(request):
     if User.objects.filter(username=username).exists():
       messages.error(request, "Username already exists.")
       return redirect("/register")
-    elif validate_password(password) == "pass_ok":
-      user = User.objects.create_user(username=username,first_name=first_name, last_name=last_name, email=email, password=password, is_active=False)
-      otp = generate_otp()
-      subject = "Email Verification Code."
-      send_otp(user, subject, otp)
-      
-      return render(request, "verify_otp.html", {'username': user.username, 'password': password})
-    else:
+    if validate_password(password) != "pass_ok":
       messages.error(request, validate_password(password))
       return redirect("/register")
+    
+    user = User.objects.create_user(username=username,first_name=first_name, last_name=last_name, email=email, password=password, is_active=False)
+    otp = generate_otp()
+    subject = "Email Verification Code."
+    send_otp(user, subject, otp)
+      
+    return render(request, "verify_otp.html", {'username': user.username, 'password': password})
   
 
   context = {
@@ -119,7 +119,7 @@ def verify_otp(request):
       user = User.objects.get(username=username)
       user.is_active = True
       user.set_password(password)
-      #user.save()
+      user.save()
       otp_record.delete()  # Optional: remove OTP after use
       return redirect('login')
     except OTP.DoesNotExist:
