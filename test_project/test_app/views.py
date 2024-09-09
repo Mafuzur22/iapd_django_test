@@ -80,13 +80,16 @@ def register_user(request):
     email = request.POST.get("email")
     password = request.POST.get("password1")
     password2 = request.POST.get("password2")
-    if validate_password(password) == "pass_ok":
+    if User.objects.filter(username=username).exists():
+      messages.error(request, "Username already exists.")
+      return redirect("/register")
+    elif validate_password(password) == "pass_ok":
       user = User.objects.create_user(username=username,first_name=first_name, last_name=last_name, email=email, password=password, is_active=False)
       otp = generate_otp()
       subject = "Email Verification Code."
       send_otp(user, subject, otp)
       
-      return render(request, "verify_otp.html", {'user_id': user.user_id})
+      return render(request, "verify_otp.html", {'username': user.username})
     else:
       messages.error(request, validate_password(password))
       return redirect("/register")
@@ -100,11 +103,11 @@ def register_user(request):
   
 def verify_otp(request):
   if request.method == 'POST':
-    user_id = request.POST['user_id']
+    username = request.POST['username']
     otp = request.POST['otp']
 
     try:
-      otp_record = OTP.objects.get(user_id=user_id, otp=otp)
+      otp_record = OTP.objects.get(username=username, otp=otp)
 
       if otp_record.is_expired():
         # Handle expired OTP
@@ -112,7 +115,7 @@ def verify_otp(request):
         return render(request, 'verify_otp.html', {'error': 'OTP has expired. Please request a new one.'})
 
       # If OTP is valid and not expired
-      user = User.objects.get(id=user_id)
+      user = User.objects.get(username=username)
       user.is_active = True
       user.save()
       otp_record.delete()  # Optional: remove OTP after use

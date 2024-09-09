@@ -91,7 +91,7 @@ button:hover {
         <h1>Verify OTP</h1>
         <form method="post">
             {% csrf_token %}
-            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <input type="hidden" name="username" value="{{ username }}">
             <label for="otp">Enter OTP:</label>
             <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
             {% if error %}
