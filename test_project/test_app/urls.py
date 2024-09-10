@@ -7,5 +7,7 @@ urlpatterns = [
     path('register', views.register_user, name="AddUser"),
     path('verify_otp', views.verify_otp),
     path('login', views.login_user, name="LoginUser"),
-    path('logout', views.logout_user)
+    path('logout', views.logout_user),
+    path('reset', views.reset_user_password),
+    path('reset_otp', views.reset_verify)
 ]

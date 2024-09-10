@@ -95,8 +95,8 @@ def register_user(request):
     otp = generate_otp()
     subject = "Email Verification Code."
     send_otp(user, subject, otp)
-      
-    return render(request, "verify_otp.html", {'user_id': user.user_id})
+
+    return render(request, "verify_otp.html", {'user_id': user.id})
   
 
   context = {
@@ -109,6 +109,7 @@ def verify_otp(request):
   if request.method == 'POST':
     user_id = request.POST['user_id']
     otp = request.POST['otp']
+    int(user_id)
 
     try:
       otp_record = OTP.objects.get(user_id=user_id, otp=otp)
@@ -166,5 +167,57 @@ def logout_user(request):
   send_notifi_mail(user, subject, message)
   return redirect("/login")
   
+  
+def reset_user_password(request):
+  if request.method == "POST":
+    try:
+      username = request.POST['username']
+      new_password = request.POST['new_password1']
+      new_password2 = request.POST['new_password2']
+      
+      if validate_password(password) != "pass_ok":
+        messages.error(request, validate_password(new_password))
+        return redirect("/reset")
+      if new_password != new_password2:
+        messages.error(request, "Confirm Password Does,t match.")
+        return redirect("/reset")
+      
+      user = User.objects.get(username=username)
+      otp = generate_otp()
+      subject = "Email Verification Code."
+      send_otp(user, subject, otp)
+
+      return render(request, "verify_pass_otp.html", {'user_id': user.id})
     
   
+    except User.DoesNotExist:
+      messages.error(request, 'User does not exist.')
+      return redirect('/login')
+  return render(request, 'reset_password.html')
+    
+def reset_verify(request):
+  if request.method == 'POST':
+    user_id = request.POST['user_id']
+    otp = request.POST['otp']
+    int(user_id)
+
+    try:
+      otp_record = OTP.objects.get(user_id=user_id, otp=otp)
+
+      if otp_record.is_expired():
+        # Handle expired OTP
+        otp_record.delete()  # Optional: remove expired OTP
+        return render(request, 'verify_pass_otp.html', {'error': 'OTP has expired. Please request a new one.'})
+
+      # If OTP is valid and not expired
+      user = User.objects.get(id=user_id)
+      user.set_password(new_password)
+      user.save()
+      otp_record.delete()
+      messages.success(register, "Password Reset") # Optional: remove OTP after use
+      return redirect('/login')
+    except OTP.DoesNotExist:
+      # Handle invalid OTP
+      return render(request, 'verify_pass_otp.html', {'error': 'Invalid OTP.'})
+
+  return render(request, 'verify_pass_otp.html')
