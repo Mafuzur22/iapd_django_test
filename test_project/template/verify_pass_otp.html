@@ -92,6 +92,7 @@ button:hover {
         <form method="post" action="/reset_otp">
             {% csrf_token %}
             <input type="hidden" name="user_id" value="{{ user_id }}">
+            <input type="hidden" name="new_password" value="{{ new_password }}">
             <label for="otp">Enter OTP:</label>
             <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
             {% if error %}

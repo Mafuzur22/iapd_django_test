@@ -124,7 +124,7 @@ def verify_otp(request):
       user.is_active = True
       user.save()
       otp_record.delete()
-      messages.success(register, "User Created") # Optional: remove OTP after use
+      messages.success(request, "User Created") # Optional: remove OTP after use
       return redirect('/login')
     except OTP.DoesNotExist:
       # Handle invalid OTP
@@ -187,7 +187,7 @@ def reset_user_password(request):
       subject = "Email Verification Code."
       send_otp(user, subject, otp)
 
-      return render(request, "verify_pass_otp.html", {'user_id': user.id})
+      return render(request, "verify_pass_otp.html", {'user_id': user.id, 'new_password': new_password})
     
   
     except User.DoesNotExist:
@@ -200,6 +200,7 @@ def reset_verify(request):
     user_id = request.POST['user_id']
     otp = request.POST['otp']
     int(user_id)
+    new_password = request.POST['new_password']
 
     try:
       otp_record = OTP.objects.get(user_id=user_id, otp=otp)
