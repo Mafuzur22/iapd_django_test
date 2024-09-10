@@ -86,6 +86,9 @@ def register_user(request):
     if validate_password(password) != "pass_ok":
       messages.error(request, validate_password(password))
       return redirect("/register")
+    if password != password2:
+      messages.error(request, "Confirm Password Does,t match.")
+      return redirect("/register")
     
     user = User.objects.create_user(username=username,first_name=first_name, last_name=last_name, email=email, password=password, is_active=False)
     user.set_password(password)
@@ -121,13 +124,19 @@ def verify_otp(request):
       user.save()
       otp_record.delete()
       messages.success(register, "User Created") # Optional: remove OTP after use
-      return redirect('login')
+      return redirect('/login')
     except OTP.DoesNotExist:
       # Handle invalid OTP
       return render(request, 'verify_otp.html', {'error': 'Invalid OTP.'})
 
   return render(request, 'verify_otp.html')
   
+def send_notifi_mail(user, subject, message):
+  subject = subject
+  message = message
+  from_email = settings.EMAIL_HOST_USER
+  recipient = [user.email]
+  send_mail(subject, message, from_email, recipient, fail_silently=False)
   
 def login_user(request):
   if request.method == "POST":
@@ -137,8 +146,11 @@ def login_user(request):
     user = authenticate(request, username=username, password=password)
     if user is not None:
       login(request, user)
-      
+      subject = "LogIn Alert"
+      message = f"Your account has been signed in {user.username}"
+      send_notifi_mail(user, subject, message)
       return redirect("/")
+      
     else:
       messages.error(request, "User Not Found")
   context = {
@@ -149,6 +161,10 @@ def login_user(request):
   
 def logout_user(request):
   logout(request)
+  subject = "LogOut Alert"
+  message = f"Your account has been signed out {user.username}"
+  send_notifi_mail(user, subject, message)
   return redirect("/login")
+  
     
   
